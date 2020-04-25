@@ -7,6 +7,16 @@ planets = Blueprint('planets', 'planets')
 
 @planets.route('/', methods=['GET'])
 def planets_index():
+	result = models.Planet.select().dicts()
+	planets = [planet for planet in result]
+	print('- ' * 20)
+	print('printed planets in planets_index()')
+	print(planets)
+	return jsonify(data=planets, message="Successfully created list".format(len(planets)), status=201), 201
+
+	print('- ' * 20)
+	print('printed result')
+	print(result)
 	return 'planets resource working'
 
 @planets.route('/', methods=['POST'])
