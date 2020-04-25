@@ -5,8 +5,8 @@ DATABASE = SqliteDatabase('planets.sqlite')
 class Planet(Model):
 	name = CharField()
 	planet_type = CharField()
-	length_of_year = IntegerField()
-	moons = BooleanField()
+	length_of_year = CharField()
+	moons = IntegerField()
 
 	class Meta:
 		database = DATABASE
