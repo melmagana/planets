@@ -44,4 +44,38 @@ def delete_planet(id):
 	print('- ' * 20)
 	print('printed num_rows_deleted')
 	print(num_rows_deleted)
-	return jsonify(data={}, message='Successfully deleted a planet!', status=200), 200
+	return jsonify(data={}, message=f'Successfully deleted a planet with the id of {id}!', status=200), 200
+
+@planets.route('/<id>', methods=['PUT'])
+def update_planet(id):
+	payload = request.get_json()
+	update_query = models.Planet.update(name=payload['name'], planet_type=payload['planet_type'], length_of_year=payload['length_of_year'], moons=payload['moons']).where(models.Planet.id == id)
+
+	num_rows_updated = update_query.execute()
+	updated_planet = models.Planet.get_by_id(id)
+	updated_planet_dict = model_to_dict(updated_planet)
+
+	return jsonify(data={}, message=f'Successfully updated a planet with the id of {id}!', status=200), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
