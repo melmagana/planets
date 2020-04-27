@@ -36,3 +36,12 @@ def create_planet():
 	# return 'CREATE ROUTE for PLANET running'
 	planet_dict = model_to_dict(add_planet)
 	return jsonify(data=planet_dict, message='Successfully created a planet!', status=201), 201
+
+@planets.route('/<id>', methods=['DELETE'])
+def delete_planet(id):
+	delete_query = models.Planet.delete().where(models.Planet.id == id)
+	num_rows_deleted = delete_query.execute()
+	print('- ' * 20)
+	print('printed num_rows_deleted')
+	print(num_rows_deleted)
+	return jsonify(data={}, message='Successfully deleted a planet!', status=200), 200
