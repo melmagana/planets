@@ -1,6 +1,15 @@
 from peewee import *
+from flask_login import UserMixin
 
 DATABASE = SqliteDatabase('planets.sqlite')
+
+class User(UserMixin, Model):
+	username=CharField(unique=True)
+	email=CharField(unique=True)
+	password=CharField()
+
+	class Meta:
+		database = DATABASE
 
 class Planet(Model):
 	name = CharField()
@@ -14,7 +23,7 @@ class Planet(Model):
 def initialize():
 	DATABASE.connect()
 
-	DATABASE.create_tables([Planet], safe=True)
+	DATABASE.create_tables([User, Planet], safe=True)
 	print('Connected to database and created tables if they were not already there')
 
 	DATABASE.close()
