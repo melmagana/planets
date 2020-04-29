@@ -15,6 +15,18 @@ app.secret_key = 'Milo is the best puppy in the world! This is not a secret.'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
+# WORK WITH USER OBJECT WHEN USER IS LOGGED IN
+@login_manager.user_loader
+def load_user(user_id):
+	try:
+		return models.User.get(user_id)
+
+	except models.DoesNotExist:
+		return None
+
+
+# CORS -- CROSS ORIGIN RESOURCE SHARING
 CORS(planets, origins=['http://localhost:3000'], support_credentials=True)
 CORS(users, origins=['http://localhost:3000'], support_credentials=True)
 

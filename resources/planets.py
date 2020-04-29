@@ -2,28 +2,28 @@ import models
 
 from flask import Blueprint, request, jsonify
 from playhouse.shortcuts import model_to_dict
+from flask_login import current_user
 
 planets = Blueprint('planets', 'planets')
 
 @planets.route('/', methods=['GET'])
 def planets_index():
-	result = models.Planet.select().dicts()
-	planets = [planet for planet in result]
-	print('- ' * 20)
-	print('printed planets in planets_index()')
-	print(planets)
-	return jsonify(data=planets, message="Successfully created list".format(len(planets)), status=201), 201
-
-	print('- ' * 20)
-	print('printed result')
+	result = models.Planet.select()
 	print(result)
-	return 'planets resource working'
 
-@planets.route('/<found_by_id>', methods=['POST'])
-def create_planet(found_by_id):
+	planet_dicts = [model_to_dict(planet) for planet in result]
+
+	for planet_dict in planet_dicts:
+		planet_dict['found_by'].pop('password')
+	print(planet_dicts)
+
+	return jsonify(data=planet_dicts, message=f"Successfully found {len(planet_dicts)} planets", status=200), 200
+
+@planets.route('/', methods=['POST'])
+def create_planet():
 	payload = request.get_json()
 	print(payload)
-	add_planet = models.Planet.create(name=payload['name'], planet_type=payload['planet_type'], orbital_period=payload['orbital_period'], moons=payload['moons'], found_by=found_by_id)
+	add_planet = models.Planet.create(name=payload['name'], planet_type=payload['planet_type'], orbital_period=payload['orbital_period'], moons=payload['moons'], found_by=current_user.id)
 	print('- ' * 20)
 	print('printed add_planet')
 	print(add_planet)
