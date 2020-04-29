@@ -8,16 +8,20 @@ planets = Blueprint('planets', 'planets')
 
 @planets.route('/', methods=['GET'])
 def planets_index():
-	result = models.Planet.select()
-	print(result)
+	# result = models.Planet.select()
+	# print(result)
 
-	planet_dicts = [model_to_dict(planet) for planet in result]
+	""" get all the planets from the database associated with the currently logged in user """
+	current_user_planet_dicts = [model_to_dict(planet) for planet in current_user.planets]
+	# planet_dicts = [model_to_dict(planet) for planet in result]
 
-	for planet_dict in planet_dicts:
+	# for planet_dict in planet_dicts:
+	for planet_dict in current_user_planet_dicts:
 		planet_dict['found_by'].pop('password')
-	print(planet_dicts)
+	# print(planet_dicts)
+	print(current_user_planet_dicts)
 
-	return jsonify(data=planet_dicts, message=f"Successfully found {len(planet_dicts)} planets", status=200), 200
+	return jsonify(data=current_user_planet_dicts, message=f"Successfully found {len(current_user_planet_dicts)} planets", status=200), 200
 
 @planets.route('/', methods=['POST'])
 def create_planet():
