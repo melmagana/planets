@@ -145,14 +145,27 @@ def user_index():
 @users.route('/logged_in_user', methods=['GET'])
 def get_logged_in_user():
 	print(current_user)
-	print(f"{current_user.username} is current_user.username in GET logged_in_user")
+	
+	# Logic if user IS NOT currently logged in
+	if not current_user.is_authenticated:
+		return jsonify(
+			data={},
+			message="No user is currently logged in",
+			status=401
+		), 401
 
-	user_dict = model_to_dict(current_user)
+	# Logic if user IS currently logged in
+	else:
+		user_dict = model_to_dict(current_user)
 
-	# Remove password
-	user_dict.pop('password')
+		# Remove password
+		user_dict.pop('password')
 
-	return jsonify(data=user_dict), 200
+		return jsonify(
+			data=user_dict,
+			message=f"Currently logged in as {user_dict['email']}",
+			status=200
+		), 200
 
 
 
