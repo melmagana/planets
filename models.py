@@ -14,8 +14,10 @@ class User(UserMixin, Model):
 class Planet(Model):
 	name = CharField()
 	planet_type = CharField()
-	length_of_year = CharField()
+	orbital_period = CharField()
 	moons = IntegerField()
+	found_by = ForeignKeyField(User, backref='planets')
+
 
 	class Meta:
 		database = DATABASE

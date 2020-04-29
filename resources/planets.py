@@ -19,11 +19,11 @@ def planets_index():
 	print(result)
 	return 'planets resource working'
 
-@planets.route('/', methods=['POST'])
-def create_planet():
+@planets.route('/<found_by_id>', methods=['POST'])
+def create_planet(found_by_id):
 	payload = request.get_json()
 	print(payload)
-	add_planet = models.Planet.create(name=payload['name'], planet_type=payload['planet_type'], length_of_year=payload['length_of_year'], moons=payload['moons'])
+	add_planet = models.Planet.create(name=payload['name'], planet_type=payload['planet_type'], orbital_period=payload['orbital_period'], moons=payload['moons'], found_by=found_by_id)
 	print('- ' * 20)
 	print('printed add_planet')
 	print(add_planet)
@@ -35,6 +35,8 @@ def create_planet():
 	print(dir(add_planet))
 	# return 'CREATE ROUTE for PLANET running'
 	planet_dict = model_to_dict(add_planet)
+
+	planet_dict['found_by'].pop('password')
 	return jsonify(data=planet_dict, message='Successfully created a planet!', status=201), 201
 
 @planets.route('/<id>', methods=['DELETE'])
@@ -49,7 +51,7 @@ def delete_planet(id):
 @planets.route('/<id>', methods=['PUT'])
 def update_planet(id):
 	payload = request.get_json()
-	update_query = models.Planet.update(name=payload['name'], planet_type=payload['planet_type'], length_of_year=payload['length_of_year'], moons=payload['moons']).where(models.Planet.id == id)
+	update_query = models.Planet.update(name=payload['name'], planet_type=payload['planet_type'], orbital_period=payload['orbital_period'], moons=payload['moons'], found_by=payload['found_by']).where(models.Planet.id == id)
 
 	num_rows_updated = update_query.execute()
 	updated_planet = models.Planet.get_by_id(id)
