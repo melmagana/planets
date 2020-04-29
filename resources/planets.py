@@ -36,6 +36,7 @@ def create_planet(found_by_id):
 	# return 'CREATE ROUTE for PLANET running'
 	planet_dict = model_to_dict(add_planet)
 
+	#remove password
 	planet_dict['found_by'].pop('password')
 	return jsonify(data=planet_dict, message='Successfully created a planet!', status=201), 201
 
