@@ -29,6 +29,16 @@ def load_user(user_id):
 		return None
 
 
+# SEND BACK DATA WHEN USER HITS UNAUTHORIZED
+@login_manager.unauthorized_handler
+def unauthorized():
+	return jsonify(
+		data={'error': 'User not logged in'},
+		message="You must be logged in to access that resource",
+		status=401
+	), 401
+
+
 # CORS -- CROSS ORIGIN RESOURCE SHARING
 CORS(planets, origins=['http://localhost:3000'], support_credentials=True)
 CORS(users, origins=['http://localhost:3000'], support_credentials=True)

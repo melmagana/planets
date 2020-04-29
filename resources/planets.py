@@ -2,11 +2,12 @@ import models
 
 from flask import Blueprint, request, jsonify
 from playhouse.shortcuts import model_to_dict
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 planets = Blueprint('planets', 'planets')
 
 @planets.route('/', methods=['GET'])
+@login_required
 def planets_index():
 	# result = models.Planet.select()
 	# print(result)
